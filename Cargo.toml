@@ -5,3 +5,6 @@ edition = "2021"
 license = "MIT"
 
 [dependencies]
+clap = { version = "4.4.2", features = ["derive"] }
+serde = { version = "1.0.188", default-features = false, features = ["derive"] }
+toml = { version = "0.7.7", default-features = false, features = ["parse"] }
