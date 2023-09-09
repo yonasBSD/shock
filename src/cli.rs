@@ -12,6 +12,10 @@ pub struct Args {
     #[arg(short, long)]
     pub verbose: bool,
 
+    /// Perform destructive actions. Omit for dry run
+    #[arg(long)]
+    pub destroy: bool,
+
     /// Path to the TOML configuration
     #[arg(short, long)]
     pub config: PathBuf,

@@ -14,6 +14,12 @@ impl fmt::Display for Snapshot<'_> {
     }
 }
 
+impl AsRef<OsStr> for Snapshot<'_> {
+    fn as_ref(&self) -> &OsStr {
+        self.whole
+    }
+}
+
 pub fn to_delete<'a>(
     verbose: bool,
     config: &Config,

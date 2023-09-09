@@ -3,6 +3,7 @@ use clap::Parser;
 use core::fmt;
 use std::{
     fs, iter,
+    ops::Not,
     process::{exit, Command, Stdio},
 };
 
@@ -57,7 +58,7 @@ fn main() {
         .args(
             iter::once("list")
                 .chain(args.recursive.then_some("-r"))
-                .chain(["-Hpt", "snap", "-o", "name", "-S", "name"]),
+                .chain(["-Hpt", "snap", "-o", "name", "-S", "creation"]),
         )
         .args(args.datasets)
         .stdin(Stdio::null())
@@ -69,6 +70,23 @@ fn main() {
         Ok(_) => bail(format_args!("failed to run `zfs list`")),
         Err(e) => bail(format_args!("failed to run `zfs list`: {e}")),
     };
+
+    for snapshot in snapshot::to_delete(args.verbose, &config, &zfs_list_output) {
+        Command::new("zfs")
+            .args(
+                ["destroy", "-v"]
+                    .into_iter()
+                    .chain(args.destroy.not().then_some("-n")),
+            )
+            .arg(&snapshot)
+            .stdin(Stdio::null())
+            .stderr(Stdio::inherit())
+            .stdout(Stdio::inherit())
+            .spawn()
+            .unwrap()
+            .wait()
+            .unwrap();
+    }
 }
 
 fn err(msg: impl fmt::Display) {
