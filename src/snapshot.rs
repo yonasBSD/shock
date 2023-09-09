@@ -15,6 +15,7 @@ impl fmt::Display for Snapshot<'_> {
 }
 
 pub fn to_delete<'a>(
+    verbose: bool,
     config: &Config,
     zfs_list_output: &'a [u8],
 ) -> impl Iterator<Item = Snapshot<'a>> {
@@ -51,11 +52,14 @@ pub fn to_delete<'a>(
                 })
                 .iter_mut()
                 .find_map(|(p, remaining)| {
-                    snapshot
-                        .name
-                        .as_bytes()
-                        .starts_with(p.as_bytes())
-                        .then_some(remaining)
+                    if snapshot.name.as_bytes().starts_with(p.as_bytes()) {
+                        Some(remaining)
+                    } else {
+                        if verbose {
+                            eprintln!("ignoring {snapshot}");
+                        }
+                        None
+                    }
                 })
                 .map(|remaining| {
                     if *remaining == 0 {

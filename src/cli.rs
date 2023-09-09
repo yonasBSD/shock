@@ -4,9 +4,13 @@ use std::path::PathBuf;
 #[derive(clap::Parser, Debug)]
 #[command(version)]
 pub struct Args {
-    /// Whether to recursively consider snapshots of each dataset
+    /// Recursively operate on the specified datasets
     #[arg(short, long)]
     pub recursive: bool,
+
+    /// Enable verbose output
+    #[arg(short, long)]
+    pub verbose: bool,
 
     /// Path to the TOML configuration
     #[arg(short, long)]
