@@ -1,10 +1,14 @@
 use crate::config::{Config, PrefixConfig, TomlConfig};
 use clap::Parser;
 use core::fmt;
-use std::{fs, process::exit};
+use std::{
+    fs, iter,
+    process::{exit, Command, Stdio},
+};
 
 mod cli;
 mod config;
+mod snapshot;
 
 const NAME: &str = env!("CARGO_BIN_NAME");
 
@@ -49,13 +53,30 @@ fn main() {
             }
         }
     };
- }
 
-fn err(msg: impl std::fmt::Display) {
+    let zfs_list_output = match Command::new("zfs")
+        .args(
+            iter::once("list")
+                .chain(args.recursive.then_some("-r"))
+                .chain(["-Hpt", "snap", "-o", "name", "-S", "name"]),
+        )
+        .args(&config.datasets)
+        .stdin(Stdio::null())
+        .stderr(Stdio::inherit())
+        .stdout(Stdio::piped())
+        .output()
+    {
+        Ok(c) if c.status.success() => c.stdout,
+        Ok(_) => bail(format_args!("failed to run `zfs list`")),
+        Err(e) => bail(format_args!("failed to run `zfs list`: {e}")),
+    };
+}
+
+fn err(msg: impl fmt::Display) {
     eprintln!("{NAME}: error: {msg}");
 }
 
-fn bail(msg: impl std::fmt::Display) -> ! {
+fn bail(msg: impl fmt::Display) -> ! {
     err(msg);
     exit(1);
 }
