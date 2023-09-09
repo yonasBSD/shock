@@ -75,3 +75,81 @@ pub fn to_delete<'a>(
         .into_iter()
         .rev()
 }
+
+#[cfg(test)]
+mod test {
+    use super::to_delete;
+    use crate::config::{Config, PrefixConfig};
+
+    #[test]
+    fn smoke() {
+        assert_eq!(
+            [
+                "pool/data/nested@daily-1",
+                "pool/data/nested@daily-2",
+                "pool/data/nested@frequently-1",
+                "pool/data/nested@frequently-2",
+                "pool/data/nested@weekly-1",
+                "pool/data/nested@weekly-2",
+                "pool/data/nested@weekly-3",
+                "tank/data@frequently-1",
+                "tank/data@frequently-2",
+                "tank/data/nested@frequently-1",
+                "tank/data/nested@frequently-2",
+            ]
+            .as_slice(),
+            to_delete(
+                false,
+                &Config::new(vec![
+                    PrefixConfig {
+                        prefix: "monthly".into(),
+                        keep: 3,
+                    },
+                    PrefixConfig {
+                        prefix: "weekly".into(),
+                        keep: 0,
+                    },
+                    PrefixConfig {
+                        prefix: "daily".into(),
+                        keep: 2,
+                    },
+                    PrefixConfig {
+                        prefix: "hourly".into(),
+                        keep: 5,
+                    },
+                    PrefixConfig {
+                        prefix: "frequently".into(),
+                        keep: 1,
+                    },
+                ])
+                .unwrap(),
+                [
+                    "tank/data/nested@frequently-3",
+                    "tank/data/nested@hourly-1",
+                    "tank/data/nested@frequently-2",
+                    "tank/data/nested@frequently-1",
+                    "tank/data@frequently-3",
+                    "tank/data@frequently-2",
+                    "tank/data@frequently-1",
+                    "pool/data/nested@weekly-3",
+                    "pool/data/nested@weekly-2",
+                    "pool/data/nested@weekly-1",
+                    "pool/data/nested@monthly-3",
+                    "pool/data/nested@daily-4",
+                    "pool/data/nested@frequently-3",
+                    "pool/data/nested@frequently-2",
+                    "pool/data/nested@monthly-2",
+                    "pool/data/nested@daily-3",
+                    "pool/data/nested@frequently-1",
+                    "pool/data/nested@monthly-1",
+                    "pool/data/nested@daily-2",
+                    "pool/data/nested@daily-1",
+                ]
+                .join("\n")
+                .as_bytes(),
+            )
+            .map(|s| s.to_string())
+            .collect::<Vec<_>>()
+        );
+    }
+}

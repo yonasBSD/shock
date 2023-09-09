@@ -37,7 +37,6 @@ fn main() {
         };
 
         match Config::new(
-            args.datasets,
             config
                 .prefix
                 .into_iter()
@@ -60,7 +59,7 @@ fn main() {
                 .chain(args.recursive.then_some("-r"))
                 .chain(["-Hpt", "snap", "-o", "name", "-S", "name"]),
         )
-        .args(&config.datasets)
+        .args(args.datasets)
         .stdin(Stdio::null())
         .stderr(Stdio::inherit())
         .stdout(Stdio::piped())

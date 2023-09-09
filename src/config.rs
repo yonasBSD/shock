@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, path::PathBuf};
+use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PrefixConfig {
@@ -9,7 +9,6 @@ pub struct PrefixConfig {
 #[allow(clippy::manual_non_exhaustive)] // NB: want to enforce this within the crate
 #[derive(Debug)]
 pub struct Config {
-    pub datasets: Vec<PathBuf>,
     pub prefix_configs: Vec<PrefixConfig>,
     _priv: (),
 }
@@ -20,10 +19,7 @@ pub struct TomlConfig {
 }
 
 impl Config {
-    pub fn new(
-        datasets: Vec<PathBuf>,
-        mut prefix_configs: Vec<PrefixConfig>,
-    ) -> Result<Self, Vec<(String, String)>> {
+    pub fn new(mut prefix_configs: Vec<PrefixConfig>) -> Result<Self, Vec<(String, String)>> {
         prefix_configs.sort_by(|a, b| a.prefix.cmp(&b.prefix));
 
         let overlapping_prefixes = prefix_configs
@@ -43,7 +39,6 @@ impl Config {
 
         if overlapping_prefixes.is_empty() {
             Ok(Self {
-                datasets,
                 prefix_configs,
                 _priv: (),
             })
@@ -59,7 +54,6 @@ mod test {
 
     #[test]
     fn detects_overlaps() {
-        let expected_datasets = vec!["pool/data/sub".into(), "tank/something/else".into()];
         let expected_prefix_configs = vec![
             PrefixConfig {
                 prefix: "foo/bar".into(),
@@ -72,12 +66,10 @@ mod test {
         ];
 
         let Config {
-            datasets,
             prefix_configs,
             _priv,
-        } = Config::new(expected_datasets.clone(), expected_prefix_configs.clone()).unwrap();
+        } = Config::new(expected_prefix_configs.clone()).unwrap();
 
-        assert_eq!(expected_datasets, datasets);
         assert_eq!(expected_prefix_configs, prefix_configs);
 
         let expected_err = [
@@ -90,35 +82,32 @@ mod test {
 
         assert_eq!(
             expected_err.as_slice(),
-            Config::new(
-                expected_datasets,
-                vec![
-                    PrefixConfig {
-                        prefix: "foo".into(),
-                        keep: 42,
-                    },
-                    PrefixConfig {
-                        prefix: "foo/baz".into(),
-                        keep: 5,
-                    },
-                    PrefixConfig {
-                        prefix: "foo/baz/qux".into(),
-                        keep: 5,
-                    },
-                    PrefixConfig {
-                        prefix: "bar".into(),
-                        keep: 5,
-                    },
-                    PrefixConfig {
-                        prefix: "baz/asdf".into(),
-                        keep: 5,
-                    },
-                    PrefixConfig {
-                        prefix: "baz".into(),
-                        keep: 5,
-                    },
-                ]
-            )
+            Config::new(vec![
+                PrefixConfig {
+                    prefix: "foo".into(),
+                    keep: 42,
+                },
+                PrefixConfig {
+                    prefix: "foo/baz".into(),
+                    keep: 5,
+                },
+                PrefixConfig {
+                    prefix: "foo/baz/qux".into(),
+                    keep: 5,
+                },
+                PrefixConfig {
+                    prefix: "bar".into(),
+                    keep: 5,
+                },
+                PrefixConfig {
+                    prefix: "baz/asdf".into(),
+                    keep: 5,
+                },
+                PrefixConfig {
+                    prefix: "baz".into(),
+                    keep: 5,
+                },
+            ])
             .unwrap_err()
         )
     }
