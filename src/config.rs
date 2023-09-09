@@ -1,3 +1,5 @@
+use std::{collections::BTreeMap, path::PathBuf};
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PrefixConfig {
     pub prefix: String,
@@ -7,14 +9,19 @@ pub struct PrefixConfig {
 #[allow(clippy::manual_non_exhaustive)] // NB: want to enforce this within the crate
 #[derive(Debug)]
 pub struct Config {
-    pub datasets: Vec<String>,
+    pub datasets: Vec<PathBuf>,
     pub prefix_configs: Vec<PrefixConfig>,
     _priv: (),
 }
 
+#[derive(serde::Deserialize)]
+pub struct TomlConfig {
+    pub prefix: BTreeMap<String, u32>,
+}
+
 impl Config {
     pub fn new(
-        datasets: Vec<String>,
+        datasets: Vec<PathBuf>,
         mut prefix_configs: Vec<PrefixConfig>,
     ) -> Result<Self, Vec<(String, String)>> {
         prefix_configs.sort_by(|a, b| a.prefix.cmp(&b.prefix));
