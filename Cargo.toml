@@ -5,6 +5,7 @@ edition = "2021"
 license = "MIT"
 
 [dependencies]
+anyhow = { version = "1.0.75", default-features = false, features = ["std"] }
 bstr = { version = "1.6.2", default-features = false }
 clap = { version = "4.4.2", features = ["derive"] }
 serde = { version = "1.0.188", default-features = false, features = ["derive"] }

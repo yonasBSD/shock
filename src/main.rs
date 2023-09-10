@@ -1,60 +1,49 @@
 use crate::config::{Config, PrefixConfig, TomlConfig};
+use anyhow::Context;
 use clap::Parser;
-use core::fmt;
 use std::{
     fs, iter,
     ops::Not,
-    process::{exit, Command, Stdio},
+    process::{Command, Stdio},
 };
 
 mod cli;
 mod config;
 mod snapshot;
 
-const NAME: &str = env!("CARGO_BIN_NAME");
-
-fn main() {
+fn main() -> anyhow::Result<()> {
     let args = cli::Args::parse();
 
     if args.datasets.is_empty() {
-        bail("no datasets specified");
+        anyhow::bail!("no datasets specified");
     }
 
-    let config = {
-        let toml = match fs::read_to_string(&args.config) {
-            Ok(toml) => toml,
-            Err(e) => bail(format_args!(
-                "cannot read config file: {}: {e}",
-                args.config.display()
-            )),
-        };
-
-        let config = match toml::from_str::<TomlConfig>(&toml) {
-            Ok(config) => config,
-            Err(e) => bail(format_args!(
-                "cannot parse config file: {}: {e}",
-                args.config.display()
-            )),
-        };
-
-        match Config::new(
-            config
-                .prefix
-                .into_iter()
-                .map(|(prefix, keep)| PrefixConfig { prefix, keep })
-                .collect(),
-        ) {
-            Ok(config) => config,
-            Err(overlapping_prefixes) => {
-                overlapping_prefixes
+    let config = fs::read_to_string(&args.config)
+        .with_context(|| format!("cannot read config file: {}", args.config.display()))
+        .and_then(|toml| {
+            toml::from_str::<TomlConfig>(&toml)
+                .with_context(|| format!("cannot parse config file: {}", args.config.display()))
+        })
+        .and_then(|config| {
+            Config::new(
+                config
+                    .prefix
                     .into_iter()
-                    .for_each(|(a, b)| err(format_args!("overlapping prefix: \"{a}\", \"{b}\"")));
-                exit(1);
-            }
-        }
-    };
+                    .map(|(prefix, keep)| PrefixConfig { prefix, keep })
+                    .collect(),
+            )
+            .map_err(|overlapping_prefixes| {
+                let mut iter = overlapping_prefixes
+                    .into_iter()
+                    .rev()
+                    .map(|(a, b)| format!("overlapping prefix: \"{a}\", \"{b}\""));
+                let first = iter.next().unwrap();
+                iter.fold(anyhow::anyhow!(first), anyhow::Error::context)
+                    .context("configuration has overlapping prefixes")
+            })
+        })?;
 
-    let zfs_list_output = match Command::new("zfs")
+    let zfs_list_output = Command::new("zfs")
         .args(
             iter::once("list")
                 .chain(args.recursive.then_some("-r"))
@@ -65,14 +54,14 @@ fn main() {
         .stderr(Stdio::inherit())
         .stdout(Stdio::piped())
         .output()
-    {
-        Ok(c) if c.status.success() => c.stdout,
-        Ok(_) => bail(format_args!("failed to run `zfs list`")),
-        Err(e) => bail(format_args!("failed to run `zfs list`: {e}")),
-    };
+        .context("failed to run `zfs list`")
+        .and_then(|c| {
+            anyhow::ensure!(c.status.success(), "failed to run `zfs list`");
+            Ok(c.stdout)
+        })?;
 
     for snapshot in snapshot::to_delete(args.verbose, &config, &zfs_list_output) {
-        Command::new("zfs")
+        let _ = Command::new("zfs")
             .args(
                 ["destroy", "-v"]
                     .into_iter()
@@ -83,17 +72,9 @@ fn main() {
             .stderr(Stdio::inherit())
             .stdout(Stdio::inherit())
             .spawn()
-            .unwrap()
-            .wait()
-            .unwrap();
+            .context("failed to run `zfs destroy`")?
+            .wait();
     }
-}
 
-fn err(msg: impl fmt::Display) {
-    eprintln!("{NAME}: error: {msg}");
-}
-
-fn bail(msg: impl fmt::Display) -> ! {
-    err(msg);
-    exit(1);
+    Ok(())
 }
