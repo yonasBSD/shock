@@ -63,15 +63,21 @@
           };
         };
 
+        app = flake-utils.lib.mkApp {
+          drv = shock;
+        };
+
       in
       {
         inherit checks;
         packages = {
+          inherit shock;
           default = shock;
         };
 
-        apps.default = flake-utils.lib.mkApp {
-          drv = shock;
+        apps = {
+          default = app;
+          shock = app;
         };
 
         devShells.default = craneLib.devShell {
