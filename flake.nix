@@ -7,81 +7,51 @@
       inputs = {
         flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
-        rust-overlay.follows = "rust-overlay";
       };
     };
-
 
     flake-utils.url = "github:numtide/flake-utils";
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, crane, flake-utils, rust-overlay, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs = inputs@{ self, nixpkgs, ... }:
+    let
+      supportedSystems = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+
+      myPkgsFor = pkgs: import ./nix/pkgs {
+        inherit pkgs inputs;
+        craneLib = inputs.crane.mkLib pkgs;
+      };
+    in
+    {
+      overlays.default = final: prev: myPkgsFor final;
+
+    } // inputs.flake-utils.lib.eachSystem supportedSystems (system:
       let
-        pkgs = import nixpkgs {
+        mkPkgs = system: import nixpkgs {
           inherit system;
-          overlays = [ (import rust-overlay) ];
         };
 
-        toolchain = pkgs.pkgsBuildHost.rust-bin.stable.latest.default;
-        craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;
-
-        src = craneLib.cleanCargoSource (craneLib.path ./.);
-
-        # Common arguments can be set here to avoid repeating them later
-        commonArgs = {
-          inherit src;
-        };
-
-        # Build *just* the cargo dependencies, so we can reuse
-        # all of that work (e.g. via cachix) when running in CI
-        cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-
-        # Build the actual crate itself, reusing the dependency
-        # artifacts from above.
-        shock = craneLib.buildPackage (commonArgs // {
-          inherit cargoArtifacts;
-        });
-
-        checks = {
-          inherit shock;
-
-          shock-clippy = craneLib.cargoClippy (commonArgs // {
-            inherit cargoArtifacts;
-            cargoClippyExtraArgs = "--all-targets -- --deny warnings";
-          });
-
-          shock-fmt = craneLib.cargoFmt {
-            inherit src;
-          };
-        };
-
-        app = flake-utils.lib.mkApp {
-          drv = shock;
-        };
-
+        pkgs = mkPkgs system;
+        myPkgs = myPkgsFor pkgs;
+        checks = myPkgs // (import ./nix/checks.nix { inherit pkgs myPkgs; });
       in
       {
         inherit checks;
-        packages = {
-          inherit shock;
-          default = shock;
-        };
 
-        apps = {
-          default = app;
-          shock = app;
-        };
+        formatter = pkgs.nixpkgs-fmt;
 
-        devShells.default = craneLib.devShell {
-          inherit checks;
+        packages = myPkgs // { default = myPkgs.shock; };
+
+        devShells.default = pkgs.mkShell {
+          inputsFrom = builtins.attrValues checks;
+          nativeBuildInputs = with pkgs; [
+            cargo
+            rustc
+            clippy
+          ];
         };
       });
 }
