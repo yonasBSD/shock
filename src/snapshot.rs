@@ -58,14 +58,11 @@ pub fn to_delete<'a>(
                 })
                 .iter_mut()
                 .find_map(|(p, remaining)| {
-                    if snapshot.name.as_bytes().starts_with(p.as_bytes()) {
-                        Some(remaining)
-                    } else {
-                        if verbose {
-                            eprintln!("ignoring {snapshot}");
-                        }
-                        None
-                    }
+                    snapshot
+                        .name
+                        .as_bytes()
+                        .starts_with(p.as_bytes())
+                        .then_some(remaining)
                 })
                 .map(|remaining| {
                     if *remaining == 0 {
@@ -75,7 +72,12 @@ pub fn to_delete<'a>(
                         false
                     }
                 })
-                .unwrap_or(false)
+                .unwrap_or_else(|| {
+                    if verbose {
+                        eprintln!("ignoring {snapshot}");
+                    }
+                    false
+                })
         })
         .collect::<Vec<_>>()
         .into_iter()
