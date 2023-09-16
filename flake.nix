@@ -28,6 +28,10 @@
     {
       overlays.default = final: prev: myPkgsFor final;
 
+      nixosModules = rec {
+        default = shock;
+        shock = import ./nix/modules/shock.nix;
+      };
     } // inputs.flake-utils.lib.eachSystem supportedSystems (system:
       let
         mkPkgs = system: import nixpkgs {
