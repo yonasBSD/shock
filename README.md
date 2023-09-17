@@ -1,3 +1,5 @@
+[![Crates.io](https://img.shields.io/crates/v/shock.svg)](https://crates.io/crates/shock)
+
 # shock
 
 Regularly `shock` your ZFS pools to maintain good hygiene and prune stale
@@ -13,6 +15,12 @@ or:
 
 ```shell
 nix shell github:ipetkov/shock
+```
+
+or:
+
+```shell
+cargo install shock
 ```
 
 then:
