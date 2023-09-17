@@ -5,9 +5,13 @@ permissions:
   contents: write
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - "Run Tests"
     branches:
       - main
+    types:
+      - completed
 
 jobs:
   release-plz:
