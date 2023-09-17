@@ -1,0 +1,28 @@
+name: Update flake dependencies
+
+on:
+  workflow_dispatch: # for allowing manual triggers of the workflow
+  schedule:
+    - cron: '37 16 3 * *'
+
+permissions:
+  contents: read
+
+jobs:
+  update-and-push-deps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@v4
+    - uses: DeterminateSystems/update-flake-lock@v20
+      name: Update flake.lock
+      id: flakeupdate
+      with:
+        token: ${{ secrets.PAT_FLAKE_UPDATE }}
+        branch: "automation/flake-update"
+        commit-msg: "chore(flake): Update flake.lock"
+        pr-title: "Update flake.lock"
+        pr-labels: |
+          automated
+          dependencies
+          flake update
