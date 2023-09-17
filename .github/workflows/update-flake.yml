@@ -18,7 +18,7 @@ jobs:
       name: Update flake.lock
       id: flakeupdate
       with:
-        token: ${{ secrets.PAT_FLAKE_UPDATE }}
+        token: ${{ secrets.RELEASE_PLZ_TOKEN }}
         branch: "automation/flake-update"
         commit-msg: "chore(flake): Update flake.lock"
         pr-title: "Update flake.lock"
