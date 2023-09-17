@@ -102,6 +102,24 @@ zfs-auto-snap_hourly = 24
 zfs-auto-snap_frequent = 4
 ```
 
+## Why this exists
+
+Snapshot creation and pruning are inherently intertwined to the point that
+usually they are both done with the same tool. It can get difficult, however,
+to manage snapshots created on another host (and replicated to the current host)
+without actually running the snapshot creator on that pool.
+
+As a more concrete example:
+[`zfs-auto-snapshot`](https://github.com/bdrewery/zfstools#zfs-auto-snapshot) only
+prunes snapshots while creating snapshots, so if one is replicating a dataset
+whose snapshots are created by `zfs-auto-snapshot` there isn't a good way to
+prune them (especially since on NixOS there is a single global configuration for
+what snapshots are kept). [Sanoid](https://github.com/jimsalterjrs/sanoid)
+allows for comprehensive management policies, except it, sadly, only knows how
+to manage snapshots it has created (and the names used by `zfs-auto-snapshot`
+differ). For the situations where is is impractical or infeasible to use
+`sanoid`, `shock` exists as an easy way to bridge the gap.
+
 ## License
 
 This project is licensed under the MIT license.
