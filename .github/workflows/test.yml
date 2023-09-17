@@ -1,0 +1,26 @@
+name: "Test"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - 'main'
+      - 'ci*' # Allow testing CI fixes without opening a PR
+jobs:
+  tests-pass:
+    name: all systems go
+    runs-on: ubuntu-latest
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    steps:
+      - run: exit 1
+    needs:
+      - checks
+
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: DeterminateSystems/nix-installer-action@v4
+    - uses: DeterminateSystems/magic-nix-cache-action@v2
+    - name: flake checks
+      run: nix flake check --print-build-logs
