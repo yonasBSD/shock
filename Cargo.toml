@@ -3,6 +3,14 @@ name = "shock"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
+description = """
+Regularly `shock` your ZFS pools to maintain good hygiene and prune stale snapshots
+"""
+documentation = "https://docs.rs/shock/"
+homepage = "https://github.com/ipetkov/shock"
+keywords = ["zfs"]
+readme = "README.md"
+repository = "https://github.com/ipetkov/shock"
 
 [dependencies]
 anyhow = { version = "1.0.75", default-features = false, features = ["std"] }
