@@ -27,6 +27,6 @@ jobs:
           dependencies
           flake update
     - name: Enable Pull Request Automerge
-      run: gh pr merge --rebase --auto ${{ steps.flakeupdate.outputs.pull-request-number }}
+      run: gh pr merge --rebase --delete --auto ${{ steps.flakeupdate.outputs.pull-request-number }}
       env:
         GH_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN }}
