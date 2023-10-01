@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2](https://github.com/ipetkov/shock/compare/v0.1.1...v0.1.2) - 2023-10-01
+
+### Other
+- *(deps)* bump clap from 4.4.3 to 4.4.6 ([#9](https://github.com/ipetkov/shock/pull/9))
+- *(deps)* bump toml from 0.8.0 to 0.8.1 ([#8](https://github.com/ipetkov/shock/pull/8))
+- update gh cli flag
+- also delete branch after merging flake updates
+- enable auto approve of flake updates if they pass tests
+
 ## [0.1.1](https://github.com/ipetkov/shock/compare/v0.1.0...v0.1.1) - 2023-09-17
 
 ### Other
