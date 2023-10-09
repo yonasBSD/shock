@@ -60,6 +60,7 @@ fn main() -> anyhow::Result<()> {
             Ok(c.stdout)
         })?;
 
+    let mut num_deleted = 0usize;
     for snapshot in snapshot::to_delete(args.verbose, &config, &zfs_list_output) {
         let _ = Command::new("zfs")
             .args(
@@ -74,7 +75,10 @@ fn main() -> anyhow::Result<()> {
             .spawn()
             .context("failed to run `zfs destroy`")?
             .wait();
+
+        num_deleted += 1;
     }
 
+    eprintln!("deleted {num_deleted} snapshots");
     Ok(())
 }
