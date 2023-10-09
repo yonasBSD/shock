@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3](https://github.com/ipetkov/shock/compare/v0.1.2...v0.1.3) - 2023-10-09
+
+### Added
+- print out how many snapshots were deleted on success ([#12](https://github.com/ipetkov/shock/pull/12))
+
+### Other
+- *(deps)* update all dependencies ([#13](https://github.com/ipetkov/shock/pull/13))
+- *(flake)* Update flake.lock ([#10](https://github.com/ipetkov/shock/pull/10))
+
 ## [0.1.2](https://github.com/ipetkov/shock/compare/v0.1.1...v0.1.2) - 2023-10-01
 
 ### Other
