@@ -161,6 +161,7 @@ in
     systemd.services.shock = {
       wantedBy = [ "multi-user.target" ];
       path = [ "/run/booted-system/sw" ];
+      restartIfChanged = false;
 
       script = ''
         has_err=""
