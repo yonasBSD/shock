@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4](https://github.com/ipetkov/shock/compare/v0.1.3...v0.1.4) - 2023-11-02
+
+### Fixed
+- *(systemd)* don't start service on startup
+- *(systemd)* don't restart service when changed
+
+### Other
+- *(deps)* bump clap from 4.4.6 to 4.4.7 ([#16](https://github.com/ipetkov/shock/pull/16))
+- *(deps)* bump toml from 0.8.2 to 0.8.6 ([#18](https://github.com/ipetkov/shock/pull/18))
+- *(deps)* bump serde from 1.0.188 to 1.0.190 ([#17](https://github.com/ipetkov/shock/pull/17))
+- *(deps)* bump bstr from 1.6.2 to 1.7.0 ([#15](https://github.com/ipetkov/shock/pull/15))
+- *(deps)* bump DeterminateSystems/nix-installer-action from 4 to 6 ([#19](https://github.com/ipetkov/shock/pull/19))
+
 ## [0.1.3](https://github.com/ipetkov/shock/compare/v0.1.2...v0.1.3) - 2023-10-09
 
 ### Added

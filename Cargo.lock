@@ -194,7 +194,7 @@ dependencies = [
 
 [[package]]
 name = "shock"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "anyhow",
  "bstr",
