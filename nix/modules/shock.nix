@@ -187,7 +187,7 @@ in
         PrivateDevices = false; # zfs list fails without this, not sure what other device is needed
         PrivateNetwork = true;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = false; # Breaks with zfs 2.2.0 if enabled
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
