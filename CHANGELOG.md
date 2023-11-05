@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5](https://github.com/ipetkov/shock/compare/v0.1.4...v0.1.5) - 2023-11-05
+
+### Fixed
+- *(systemd)* disable PrivateUsers since it breaks with zfs 2.2.0
+
+### Other
+- *(deps)* bump all cargo dependencies
+- *(flake)* remove unnecessary follows clause
+- *(flake)* Update flake.lock
+
 ## [0.1.4](https://github.com/ipetkov/shock/compare/v0.1.3...v0.1.4) - 2023-11-02
 
 ### Fixed
