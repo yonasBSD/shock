@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6](https://github.com/ipetkov/shock/compare/v0.1.5...v0.1.6) - 2023-12-01
+
+### Other
+- *(deps)* bump serde from 1.0.190 to 1.0.193 ([#25](https://github.com/ipetkov/shock/pull/25))
+- *(deps)* bump clap from 4.4.7 to 4.4.10 ([#26](https://github.com/ipetkov/shock/pull/26))
+- *(deps)* bump toml from 0.8.6 to 0.8.8 ([#24](https://github.com/ipetkov/shock/pull/24))
+- *(deps)* bump bstr from 1.7.0 to 1.8.0 ([#23](https://github.com/ipetkov/shock/pull/23))
+- *(deps)* bump DeterminateSystems/nix-installer-action from 6 to 8 ([#22](https://github.com/ipetkov/shock/pull/22))
+
 ## [0.1.5](https://github.com/ipetkov/shock/compare/v0.1.4...v0.1.5) - 2023-11-05
 
 ### Fixed
