@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7](https://github.com/ipetkov/shock/compare/v0.1.6...v0.1.7) - 2024-01-01
+
+### Other
+- *(deps)* bump bstr from 1.8.0 to 1.9.0 ([#33](https://github.com/ipetkov/shock/pull/33))
+- *(deps)* bump clap from 4.4.10 to 4.4.12 ([#32](https://github.com/ipetkov/shock/pull/32))
+- *(deps)* bump anyhow from 1.0.75 to 1.0.78 ([#31](https://github.com/ipetkov/shock/pull/31))
+- *(deps)* bump DeterminateSystems/nix-installer-action from 8 to 9 ([#30](https://github.com/ipetkov/shock/pull/30))
+- *(flake)* Update flake.lock
+
 ## [0.1.6](https://github.com/ipetkov/shock/compare/v0.1.5...v0.1.6) - 2023-12-01
 
 ### Other
