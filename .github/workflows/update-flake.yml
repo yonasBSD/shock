@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: DeterminateSystems/nix-installer-action@v8
+    - uses: DeterminateSystems/nix-installer-action@v9
     - uses: DeterminateSystems/update-flake-lock@v20
       name: Update flake.lock
       id: flakeupdate
