@@ -13,7 +13,7 @@ readme = "README.md"
 repository = "https://github.com/ipetkov/shock"
 
 [dependencies]
-anyhow = { version = "1.0.78", default-features = false, features = ["std"] }
+anyhow = { version = "1.0.79", default-features = false, features = ["std"] }
 bstr = { version = "1.9.0", default-features = false }
 clap = { version = "4.4.12", features = ["derive"] }
 serde = { version = "1.0.193", default-features = false, features = ["derive"] }
