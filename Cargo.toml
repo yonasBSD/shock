@@ -17,4 +17,4 @@ anyhow = { version = "1.0.78", default-features = false, features = ["std"] }
 bstr = { version = "1.9.0", default-features = false }
 clap = { version = "4.4.12", features = ["derive"] }
 serde = { version = "1.0.193", default-features = false, features = ["derive"] }
-toml = { version = "0.8.8", default-features = false, features = ["parse"] }
+toml = { version = "0.8.9", default-features = false, features = ["parse"] }
