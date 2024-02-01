@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.8](https://github.com/ipetkov/shock/compare/v0.1.7...v0.1.8) - 2024-02-01
+
+### Other
+- *(deps)* bump clap from 4.4.12 to 4.4.18 ([#39](https://github.com/ipetkov/shock/pull/39))
+- *(deps)* bump anyhow from 1.0.78 to 1.0.79 ([#37](https://github.com/ipetkov/shock/pull/37))
+- *(deps)* bump toml from 0.8.8 to 0.8.9 ([#36](https://github.com/ipetkov/shock/pull/36))
+- *(flake)* Update flake.lock
+
 ## [0.1.7](https://github.com/ipetkov/shock/compare/v0.1.6...v0.1.7) - 2024-01-01
 
 ### Other
