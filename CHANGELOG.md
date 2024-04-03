@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.10](https://github.com/ipetkov/shock/compare/v0.1.9...v0.1.10) - 2024-04-03
+
+### Other
+- bump deps ([#57](https://github.com/ipetkov/shock/pull/57))
+- *(flake)* Update flake.lock
+- *(deps)* bump DeterminateSystems/magic-nix-cache-action from 3 to 4 ([#54](https://github.com/ipetkov/shock/pull/54))
+- *(deps)* bump toml from 0.8.10 to 0.8.12 ([#51](https://github.com/ipetkov/shock/pull/51))
+- *(deps)* bump anyhow from 1.0.80 to 1.0.81 ([#52](https://github.com/ipetkov/shock/pull/52))
+- *(deps)* bump clap from 4.5.1 to 4.5.4 ([#53](https://github.com/ipetkov/shock/pull/53))
+- *(deps)* bump DeterminateSystems/nix-installer-action from 9 to 10 ([#55](https://github.com/ipetkov/shock/pull/55))
+- *(flake)* Update flake.lock
+
 ## [0.1.9](https://github.com/ipetkov/shock/compare/v0.1.8...v0.1.9) - 2024-03-02
 
 ### Other
