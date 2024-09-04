@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: DeterminateSystems/nix-installer-action@v10
-    - uses: DeterminateSystems/update-flake-lock@v21
+    - uses: DeterminateSystems/update-flake-lock@v23
       name: Update flake.lock
       id: flakeupdate
       with:
