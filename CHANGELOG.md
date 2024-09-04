@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.11](https://github.com/ipetkov/shock/compare/v0.1.10...v0.1.11) - 2024-05-03
+
+### Other
+- *(flake)* Update flake.lock
+- *(deps)* bump serde from 1.0.197 to 1.0.199 ([#58](https://github.com/ipetkov/shock/pull/58))
+- *(deps)* bump anyhow from 1.0.81 to 1.0.82 ([#59](https://github.com/ipetkov/shock/pull/59))
+
 ## [0.1.10](https://github.com/ipetkov/shock/compare/v0.1.9...v0.1.10) - 2024-04-03
 
 ### Other
