@@ -12,7 +12,7 @@ jobs:
   update-and-push-deps:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: DeterminateSystems/nix-installer-action@v10
     - uses: DeterminateSystems/update-flake-lock@v21
       name: Update flake.lock
